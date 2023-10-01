@@ -1,0 +1,29 @@
+import com.example.imageenhancement.models.EfficientNetB7;
+import com.example.imageenhancement.models.DnCNN;
+import com.example.imageenhancement.models.DehazeNet;
+import com.example.imageenhancement.models.ColorNet;
+import java.awt.image.BufferedImage;
+
+public class ImageEnhancer {
+
+    private static final EfficientNetB7 upscaler = new EfficientNetB7();
+    private static final DnCNN denoiser = new DnCNN();
+    private static final DehazeNet dehazer = new DehazeNet();
+    private static final ColorNet colorCorrector = new ColorNet();
+
+    public static BufferedImage enhanceImage(BufferedImage image) {
+        // Upscale the image
+        BufferedImage upscaledImage = upscaler.upscale(image);
+
+        // Remove noise from the image
+        BufferedImage denoisedImage = denoiser.removeNoise(upscaledImage);
+
+        // Dehaze the image
+        BufferedImage dehazedImage = dehazer.dehaze(denoisedImage);
+
+        // Correct the color of the image
+        BufferedImage colorCorrectedImage = colorCorrector.correctColor(dehazedImage);
+
+        return colorCorrectedImage;
+    }
+}
